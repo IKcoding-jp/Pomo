@@ -4,10 +4,18 @@ let isRunning = false;
 let timerStatus = "work";
 let sessionCount = 0;
 
-const display = document.querySelector("h1");
+const display = document.querySelector(".ring-time");
 const startButton = document.getElementById("start");
 const workInput = document.getElementById("workTime");
 const breakInput = document.getElementById("breakTime");
+const ring = document.querySelector(".ring-progress");
+const circumference = 2 * Math.PI * 90;
+ring.style.strokeDasharray = circumference;
+
+function updateRing(timeLeft, totalTime) {
+    const offset = circumference * (1 - timeLeft / totalTime);
+    ring.style.strokeDashoffset = offset;
+}
 
 function formatTime(seconds) {
     const m = Math.floor(seconds / 60);
@@ -49,7 +57,7 @@ startButton.addEventListener("click", function () {
         timer = setInterval(function () {
             timeLeft = timeLeft - 1;
             display.textContent = formatTime(timeLeft);
-
+            updateRing(timeLeft, workInput.value * 60);
             if (timeLeft <= 0) {
                 handleTimerEnd();
             }

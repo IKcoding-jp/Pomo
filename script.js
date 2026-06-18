@@ -15,6 +15,7 @@ function formatTime(seconds) {
 }
 
 function handleTimerEnd() {
+    playChime();
     clearInterval(timer);
     isRunning = false;
 
@@ -31,13 +32,18 @@ function handleTimerEnd() {
     }
 }
 
+function playChime() {
+    const sound = new Audio("sounds/chime.mp3");
+    sound.play();
+}
+
 startButton.addEventListener("click", function () {
     if (isRunning) {
         clearInterval(timer);
         isRunning = false;
         startButton.textContent = "スタート";
     } else {
-        timeLeft = workInput.value * 60;
+        timeLeft = workInput.value = 5;
         timer = setInterval(function () {
             timeLeft = timeLeft - 1;
             display.textContent = formatTime(timeLeft);

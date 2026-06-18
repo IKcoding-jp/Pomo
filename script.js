@@ -40,6 +40,6 @@ resetButton.addEventListener("click", function () {
     clearInterval(timer);
     timeLeft = 1500;
     isRunning = false;
-    startButton.textcontent = "スタート";
+    startButton.textContent = "スタート";
     display.textContent = formatTime(timeLeft);
 });

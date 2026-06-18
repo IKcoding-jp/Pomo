@@ -107,3 +107,35 @@ button {
     background-color: #E0E0E0;
     color: #444;
 }
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 36px;
+    height: 20px;
+    background-color: #E0E0E0;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: background-color 0.2s;
+}
+
+input[type="checkbox"]::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: left 0.2s;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #F97316;
+}
+
+input[type="checkbox"]:checked::after {
+    left: 18px;
+}

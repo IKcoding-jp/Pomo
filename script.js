@@ -42,6 +42,11 @@ function handleTimerEnd() {
         display.textContent = formatTime(timeLeft)
         startButton.textContent = "スタート"
     }
+
+    const autoStart = document.getElementById("autoStart");
+    if (autoStart.checked) {
+        startButton.click();
+    }
 }
 
 function playChime() {

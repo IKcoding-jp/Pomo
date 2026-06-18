@@ -1,4 +1,5 @@
 let timeLeft = 1500;
+let totalTime = 1500;
 let timer;
 let isRunning = false;
 let timerStatus = "work";
@@ -33,7 +34,7 @@ function handleTimerEnd() {
         sessionCount = sessionCount + 1;
         document.getElementById("sessionCount").textContent = "セッション:" + sessionCount;
         timeLeft = (sessionCount % 4 === 0) ? 900 : breakInput.value * 60;
-        display.textContent = "休憩！";
+        display.textContent = "休憩";
         startButton.textContent = "休憩スタート";
     } else {
         timerStatus = "work";
@@ -54,10 +55,11 @@ startButton.addEventListener("click", function () {
         isRunning = false;
         startButton.textContent = "スタート";
     } else {
+        totalTime = timeLeft;
         timer = setInterval(function () {
             timeLeft = timeLeft - 1;
             display.textContent = formatTime(timeLeft);
-            updateRing(timeLeft, workInput.value * 60);
+            updateRing(timeLeft, totalTime);
             if (timeLeft <= 0) {
                 handleTimerEnd();
             }
@@ -76,6 +78,7 @@ resetButton.addEventListener("click", function () {
     isRunning = false;
     startButton.textContent = "スタート";
     display.textContent = formatTime(timeLeft);
+    updateRing(timeLeft, totalTime);
 });
 
 workInput.addEventListener("input", function () {
@@ -98,6 +101,6 @@ document.getElementById("debug").addEventListener("click", function () {
     handleTimerEnd();
 });
 
-if (location.hostname !== "localhost" && location.protocol !== "file:") {
+if (location.hostname !== "localhost" && location.hostname !== "127.0.0.1" && location.protocol !== "file:") {
     document.getElementById("debug").style.display = "none";
 }

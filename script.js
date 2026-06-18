@@ -30,7 +30,7 @@ function handleTimerEnd() {
     } else {
         timerStatus = "work";
         timeLeft = workInput.value * 60;
-        display.textContent = "25:00"
+        display.textContent = formatTime(timeLeft)
         startButton.textContent = "スタート"
     }
 }
@@ -46,7 +46,6 @@ startButton.addEventListener("click", function () {
         isRunning = false;
         startButton.textContent = "スタート";
     } else {
-        timeLeft = workInput.value * 60;
         timer = setInterval(function () {
             timeLeft = timeLeft - 1;
             display.textContent = formatTime(timeLeft);
@@ -63,6 +62,7 @@ startButton.addEventListener("click", function () {
 const resetButton = document.getElementById("reset");
 
 resetButton.addEventListener("click", function () {
+    timerStatus = "work";
     clearInterval(timer);
     timeLeft = workInput.value * 60;
     isRunning = false;

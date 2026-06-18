@@ -14,7 +14,24 @@ function formatTime(seconds) {
     return m + ":" + String(s).padStart(2, "0");
 }
 
-startButton.addEventListener("click", function() {
+function handleTimerEnd() {
+    clearInterval(timer);
+    isRunning = false;
+
+    if (timerStatus === "work") {
+        timerStatus = "break";
+        timeLeft = breakInput.value * 60;
+        display.textContent = "休憩！";
+        startButton.textContent = "休憩スタート";
+    } else {
+        timerStatus = "work";
+        timeLeft = workInput.value * 60;
+        display.textContent = "25:00"
+        startButton.textContent = "スタート"
+    }
+}
+
+startButton.addEventListener("click", function () {
     if (isRunning) {
         clearInterval(timer);
         isRunning = false;
@@ -26,20 +43,7 @@ startButton.addEventListener("click", function() {
             display.textContent = formatTime(timeLeft);
 
             if (timeLeft <= 0) {
-                clearInterval(timer);
-                isRunning = false;
-
-                if (timerStatus === "work"){
-                    timerStatus = "break";
-                    timeLeft = breakInput.value * 60;
-                    display.textContent = "休憩！";
-                    startButton.textContent = "休憩スタート";
-                } else {
-                    timerStatus = "work";
-                    timeLeft = workInput.value * 60;
-                    display.textContent = "25:00"
-                    startButton.textContent = "スタート"
-                }
+                handleTimerEnd();
             }
         }, 1000);
         isRunning = true;
@@ -57,16 +61,16 @@ resetButton.addEventListener("click", function () {
     display.textContent = formatTime(timeLeft);
 });
 
-workInput.addEventListener("input", function() {
+workInput.addEventListener("input", function () {
     if (!isRunning) {
         timeLeft = workInput.value * 60;
         display.textContent = formatTime(timeLeft);
     }
 });
 
-breakInput.addEventListener("input", function() {
+breakInput.addEventListener("input", function () {
     if (!isRunning) {
-        if(timerStatus === "break") {
+        if (timerStatus === "break") {
             timeLeft = breakInput.value * 60;
             display.textContent = formatTime(timeLeft);
         }

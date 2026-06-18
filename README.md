@@ -33,3 +33,7 @@ AIツール（Claude Code）は `.claude/settings.json` の hooks 機能で `.js
 ```
 index.html をブラウザで開く
 ```
+
+## クレジット
+
+- 通知音：[OtoLogic](https://otologic.jp)（CC BY 4.0）

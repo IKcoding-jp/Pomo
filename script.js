@@ -11,8 +11,13 @@ function formatTime(seconds) {
 }
 
 startButton.addEventListener("click", function () {
-    setInterval(function () {
+    const timer = setInterval(function () {
         timeLeft = timeLeft -1
         display.textContent = formatTime(timeLeft);
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            display.textContent = "終了!";
+        }
     }, 1000);
 })

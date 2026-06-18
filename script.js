@@ -22,11 +22,11 @@ function handleTimerEnd() {
 
     if (timerStatus === "work") {
         timerStatus = "break";
-        timeLeft = breakInput.value * 60;
-        display.textContent = "休憩！";
-        startButton.textContent = "休憩スタート";
         sessionCount = sessionCount + 1;
         document.getElementById("sessionCount").textContent = "セッション:" + sessionCount;
+        timeLeft = (sessionCount % 4 === 0) ? 900 : breakInput.value * 60;
+        display.textContent = "休憩！";
+        startButton.textContent = "休憩スタート";
     } else {
         timerStatus = "work";
         timeLeft = workInput.value * 60;
@@ -84,4 +84,8 @@ breakInput.addEventListener("input", function () {
             display.textContent = formatTime(timeLeft);
         }
     }
+});
+
+document.getElementById("debug").addEventListener("click", function () {
+    handleTimerEnd();
 });

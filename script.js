@@ -2,6 +2,7 @@ let timeLeft = 1500;
 let timer;
 let isRunning = false;
 let timerStatus = "work";
+let sessionCount = 0;
 
 const display = document.querySelector("h1");
 const startButton = document.getElementById("start");
@@ -24,6 +25,8 @@ function handleTimerEnd() {
         timeLeft = breakInput.value * 60;
         display.textContent = "休憩！";
         startButton.textContent = "休憩スタート";
+        sessionCount = sessionCount + 1;
+        document.getElementById("sessionCount").textContent = "セッション:" + sessionCount;
     } else {
         timerStatus = "work";
         timeLeft = workInput.value * 60;

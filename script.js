@@ -162,8 +162,11 @@ function updateTodayStats() {
   const today = new Date().toISOString().slice(0, 10);
   const log = JSON.parse(localStorage.getItem("studyLog") || "{}");
   const todayData = log[today] || { sessions: 0, workMinutes: 0 };
+  const h = Math.floor(todayData.workMinutes / 60);
+  const m = todayData.workMinutes % 60;
+  const timeStr = h > 0 ? h + "時間" + m + "分" : m + "分";
   document.getElementById("todayStats").textContent = 
-    "今日: " + todayData.sessions + "セッション / " + todayData.workMinutes + "分";
+    "今日: " + todayData.sessions + "セッション / " + timeStr;
 }
 
 function saveTodaySession(workMinutes) {

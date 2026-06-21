@@ -52,7 +52,6 @@ function handleTimerEnd() {
     sessionCount = sessionCount + 1;
     localStorage.setItem("sessionCount", sessionCount);
     updateDots();
-    document.getElementById("sessionCount").textContent = "×" + sessionCount;
     timeLeft = sessionCount % 4 === 0 ? 900 : breakInput.value * 60;
     display.textContent = "休憩";
     startButton.textContent = "休憩スタート";
@@ -108,7 +107,6 @@ resetButton.addEventListener("click", function () {
   isRunning = false;
   startButton.textContent = "スタート";
   display.textContent = formatTime(timeLeft);
-  document.getElementById("sessionCount").textContent = "";
   updateRing(timeLeft, totalTime);
   sessionCount = 0;
   updateDots();
@@ -155,6 +153,5 @@ if (savedWork) {
 if (savedBreak) breakInput.value = savedBreak;
 if (savedSession) {
   sessionCount = Number(savedSession);
-  document.getElementById("sessionCount").textContent = "×" + sessionCount;
   updateDots();
 }

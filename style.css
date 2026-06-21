@@ -161,3 +161,9 @@ input[type="checkbox"]:checked::after {
 .dot.active {
   background-color: #f97316;
 }
+
+#todayStats {
+  font-size: 13px;
+  color: #999;
+  margin-top: 12px;
+}

@@ -12,11 +12,9 @@
 
   <body>
     <div class="card">
-      <button id="showStats">統計</button>
-      <div class="settings">
-        <label>作業 <input type="number" id="workTime" value="25" /> 分</label>
-        <label>休憩 <input type="number" id="breakTime" value="5" /> 分</label>
-        <label>自動 <input type="checkbox" id="autoStart" /></label>
+      <div class="card-actions">
+        <button id="showStats">統計</button>
+        <button id="showSettings">設定</button>
       </div>
 
       <svg class="ring" viewBox="0 0 200 200">
@@ -49,6 +47,19 @@
         <div id="barChart" class="bar-chart"></div>
         <h3>学習カレンダー</h3>
         <div id="heatmap" class="heatmap"></div>
+      </div>
+    </div>
+
+    <div id="settingsModal" class="modal hidden">
+      <div class="modal-content">
+        <button id="closeSettings">✕</button>
+        <h2>設定</h2>
+        <div class="settings-form">
+          <label>作業<input type="number" id="workTime" value="25">分</label>
+          <label>休憩<input type="number" id="breakTime" value="5">分</label>
+          <label>長休憩<input type="number" id="longBreakTime" value="15">分</label>
+          <label>自動スタート<input type="checkbox" id="autoStart"></label>
+        </div>
       </div>
     </div>
 

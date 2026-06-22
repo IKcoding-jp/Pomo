@@ -105,15 +105,37 @@ button {
 }
 
 #showStats {
-  position: absolute;
-  top: 20px;
-  right: 24px;
   background-color: #e0e0e0;
   color: #444;
   padding: 8px 16px;
   font-size: 13px;
-  font-weight: 500px;
+  font-weight: 500;
 
+}
+
+.card-actions {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  display: flex;
+  gap: 8px;
+}
+
+#showSettings {
+  background-color: #e0e0e0;
+  color: #444;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  margin-top: 24px;
+  font-size: 14px;
+  color: #666;
 }
 
 input[type="checkbox"] {
@@ -203,6 +225,16 @@ input[type="checkbox"]:checked::after {
 }
 
 #closeStats {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #e0e0e0;
+  color: #444;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+#closeSettings {
   position: absolute;
   top: 16px;
   right: 16px;

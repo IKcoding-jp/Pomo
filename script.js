@@ -16,10 +16,15 @@ const circumference = 2 * Math.PI * 90;
 const chimeSound = new Audio("sounds/chime.mp3");
 const savedWork = localStorage.getItem("workTime");
 const savedBreak = localStorage.getItem("breakTime");
+const longBreakInput = document.getElementById("longBreakTime");
+const savedLongBreak = localStorage.getItem("longBreakTime");
 const savedSession = localStorage.getItem("sessionCount");
 const showStatsBtn = document.getElementById("showStats");
 const statsModal = document.getElementById("statsModal");
 const closeStatsBtn = document.getElementById("closeStats");
+const showSettingsBtn = document.getElementById("showSettings");
+const settingsModal = document.getElementById("settingsModal");
+const closeSettingsBtn = document.getElementById("closeSettings");
 ring.style.strokeDasharray = circumference;
 
 function updateRing(timeLeft, totalTime) {
@@ -57,7 +62,7 @@ function handleTimerEnd() {
     updateTodayStats();
     localStorage.setItem("sessionCount", sessionCount);
     updateDots();
-    timeLeft = sessionCount % 4 === 0 ? 900 : breakInput.value * 60;
+    timeLeft = sessionCount % 4 === 0 ? longBreakInput.value * 60 : breakInput.value * 60;
     display.textContent = "休憩";
     startButton.textContent = "休憩スタート";
   } else {
@@ -137,6 +142,11 @@ breakInput.addEventListener("input", function () {
   }
 });
 
+longBreakInput.addEventListener("input", function () {
+  if (longBreakInput.value < 1) longBreakInput.value = 1;
+  localStorage.setItem("longBreakTime", longBreakInput.value);
+});
+
 document.getElementById("debug").addEventListener("click", function () {
   handleTimerEnd();
 });
@@ -156,6 +166,7 @@ if (savedWork) {
   display.textContent = formatTime(timeLeft);
 }
 if (savedBreak) breakInput.value = savedBreak;
+if (savedLongBreak) longBreakInput.value = savedLongBreak;
 if (savedSession) {
   sessionCount = Number(savedSession);
   updateDots();
@@ -193,6 +204,14 @@ showStatsBtn.addEventListener("click", () => {
 
 closeStatsBtn.addEventListener("click", () => {
   statsModal.classList.add("hidden");
+});
+
+showSettingsBtn.addEventListener("click", () => {
+  settingsModal.classList.remove("hidden");
+});
+
+closeSettingsBtn.addEventListener("click", () => {
+  settingsModal.classList.add("hidden");
 });
 
 function renderBarChart() {

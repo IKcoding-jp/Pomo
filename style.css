@@ -21,6 +21,7 @@ body {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   text-align: center;
   width: 640px;
+  position: relative;
 }
 
 input[type="number"] {
@@ -97,11 +98,22 @@ button {
   color: #444;
 }
 
-#debug,
-#showStats {
+#debug {
   background-color: #e0e0e0;
   color: #444;
   margin-top: 16px;
+}
+
+#showStats {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background-color: #e0e0e0;
+  color: #444;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500px;
+
 }
 
 input[type="checkbox"] {

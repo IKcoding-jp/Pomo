@@ -110,7 +110,6 @@ button {
   padding: 8px 16px;
   font-size: 13px;
   font-weight: 500;
-
 }
 
 .card-actions {
@@ -277,7 +276,7 @@ h3 {
   color: #666;
   margin-top: 24px;
   margin-bottom: 12px;
-  text-align: left
+  text-align: left;
 }
 
 .heatmap {

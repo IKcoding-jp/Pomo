@@ -60,7 +60,7 @@ function formatTime(seconds) {
 function formatMinutes(minutes) {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
-  return h > 0 ? h + "時間" + m + "分": m + "分";
+  return h > 0 ? h + "時間" + m + "分" : m + "分";
 }
 
 function getStudyLog() {
@@ -263,10 +263,11 @@ function renderBarChart() {
   const log = getStudyLog();
   const chart = document.getElementById("barChart");
   chart.innerHTML = "";
-  const values = Array.from({length: 7}, (_, i ) => {
+  const values = Array.from({ length: 7 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - (6 - i));
-    return (log[d.toISOString().slice(0, 10)] || {workMinutes: 0}).workMinutes;
+    return (log[d.toISOString().slice(0, 10)] || { workMinutes: 0 })
+      .workMinutes;
   });
   const maxMinutes = Math.max(...values, 1);
 

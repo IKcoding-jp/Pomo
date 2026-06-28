@@ -3,6 +3,11 @@ const KEYS = {
   startTimestamp: "savedStartTimestamp",
   startTimeLeft: "savedStartTimeLeft",
   timerStatus: "savedTimerStatus",
+  workTime: "workTime",
+  breakTime: "breakTime",
+  longBreakTime: "longBreakTime",
+  sessionCount: "sessionCount",
+  studyLog: "studyLog",
 };
 
 let timeLeft = 1500;
@@ -16,22 +21,23 @@ let startTimeLeft = 0;
 
 const display = document.querySelector(".ring-time");
 const startButton = document.getElementById("start");
-const workInput = document.getElementById("workTime");
-const breakInput = document.getElementById("breakTime");
+const workInput = document.getElementById(KEYS.workTime);
+const breakInput = document.getElementById(KEYS.breakTime);
 const ring = document.querySelector(".ring-progress");
 const circumference = 2 * Math.PI * 90;
 const chimeSound = new Audio("sounds/chime.mp3");
-const savedWork = localStorage.getItem("workTime");
-const savedBreak = localStorage.getItem("breakTime");
-const longBreakInput = document.getElementById("longBreakTime");
-const savedLongBreak = localStorage.getItem("longBreakTime");
-const savedSession = localStorage.getItem("sessionCount");
+const savedWork = localStorage.getItem(KEYS.workTime);
+const savedBreak = localStorage.getItem(KEYS.breakTime);
+const longBreakInput = document.getElementById(KEYS.longBreakTime);
+const savedLongBreak = localStorage.getItem(KEYS.longBreakTime);
+const savedSession = localStorage.getItem(KEYS.sessionCount);
 const showStatsBtn = document.getElementById("showStats");
 const statsModal = document.getElementById("statsModal");
 const closeStatsBtn = document.getElementById("closeStats");
 const showSettingsBtn = document.getElementById("showSettings");
 const settingsModal = document.getElementById("settingsModal");
 const closeSettingsBtn = document.getElementById("closeSettings");
+const autoStartInput = document.getElementById("autoStart");
 ring.style.strokeDasharray = circumference;
 
 function updateRing(timeLeft, totalTime) {
@@ -78,7 +84,7 @@ function startTimer() {
 }
 
 function getStudyLog() {
-  return JSON.parse(localStorage.getItem("studyLog") || "{}");
+  return JSON.parse(localStorage.getItem(KEYS.studyLog) || "{}");
 }
 
 function handleTimerEnd() {
@@ -92,7 +98,7 @@ function handleTimerEnd() {
     sessionCount = sessionCount + 1;
     saveTodaySession(Number(workInput.value));
     updateTodayStats();
-    localStorage.setItem("sessionCount", sessionCount);
+    localStorage.setItem(KEYS.sessionCount, sessionCount);
     updateDots();
     timeLeft =
       sessionCount % 4 === 0
@@ -107,8 +113,7 @@ function handleTimerEnd() {
     startButton.textContent = "スタート";
   }
 
-  const autoStart = document.getElementById("autoStart");
-  if (autoStart.checked) {
+  if (autoStartInput.checked) {
     startButton.click();
   }
 }
@@ -146,7 +151,7 @@ resetButton.addEventListener("click", function () {
   timeLeft = workInput.value * 60;
   isRunning = false;
   localStorage.removeItem(KEYS.timerRunning);
-  localStorage.setItem("sessionCount", 0);
+  localStorage.setItem(KEYS.sessionCount, 0);
   startButton.textContent = "スタート";
   display.textContent = formatTime(timeLeft);
   updateRing(timeLeft, totalTime);
@@ -156,7 +161,7 @@ resetButton.addEventListener("click", function () {
 
 workInput.addEventListener("input", function () {
   if (workInput.value < 1) workInput.value = 1;
-  localStorage.setItem("workTime", workInput.value);
+  localStorage.setItem(KEYS.workTime, workInput.value);
   if (!isRunning) {
     timeLeft = workInput.value * 60;
     display.textContent = formatTime(timeLeft);
@@ -165,7 +170,7 @@ workInput.addEventListener("input", function () {
 
 breakInput.addEventListener("input", function () {
   if (breakInput.value < 1) breakInput.value = 1;
-  localStorage.setItem("breakTime", breakInput.value);
+  localStorage.setItem(KEYS.breakTime, breakInput.value);
   if (!isRunning) {
     if (timerStatus === "break") {
       timeLeft = breakInput.value * 60;
@@ -176,7 +181,7 @@ breakInput.addEventListener("input", function () {
 
 longBreakInput.addEventListener("input", function () {
   if (longBreakInput.value < 1) longBreakInput.value = 1;
-  localStorage.setItem("longBreakTime", longBreakInput.value);
+  localStorage.setItem(KEYS.longBreakTime, longBreakInput.value);
 });
 
 document.getElementById("debug").addEventListener("click", function () {
@@ -221,7 +226,7 @@ function saveTodaySession(workMinutes) {
   }
   log[today].sessions += 1;
   log[today].workMinutes += workMinutes;
-  localStorage.setItem("studyLog", JSON.stringify(log));
+  localStorage.setItem(KEYS.studyLog, JSON.stringify(log));
 }
 
 if (localStorage.getItem(KEYS.timerRunning) === "true") {

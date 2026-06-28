@@ -248,6 +248,12 @@ function renderBarChart() {
   const log = JSON.parse(localStorage.getItem("studyLog") || "{}");
   const chart = document.getElementById("barChart");
   chart.innerHTML = "";
+  const values = Array.from({length: 7}, (_, i ) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (6 - i));
+    return (log[d.toISOString().slice(0, 10)] || {workMinutes: 0}).workMinutes;
+  });
+  const maxMinutes = Math.max(...values, 1);
 
   for (let i = 6; i >= 0; i--) {
     const date = new Date();
@@ -259,7 +265,7 @@ function renderBarChart() {
     bar.className = "bar-item";
     bar.innerHTML =
       '<div class="bar-fill" style="height: ' +
-      data.workMinutes * 2 +
+      Math.round((data.workMinutes / maxMinutes) * 116) +
       'px"></div>' +
       '<div class="bar-label">' +
       (date.getMonth() + 1) +

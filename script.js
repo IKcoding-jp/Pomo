@@ -1,4 +1,5 @@
 const KEYS = {
+  autoStart: "autoStart",
   timerRunning: "timerRunning",
   startTimestamp: "savedStartTimestamp",
   startTimeLeft: "savedStartTimeLeft",
@@ -184,6 +185,10 @@ longBreakInput.addEventListener("input", function () {
   localStorage.setItem(KEYS.longBreakTime, longBreakInput.value);
 });
 
+autoStartInput.addEventListener("change", function () {
+  localStorage.setItem(KEYS.autoStart, autoStartInput.checked);
+});
+
 document.getElementById("debug").addEventListener("click", function () {
   handleTimerEnd();
 });
@@ -208,6 +213,9 @@ if (savedSession) {
   sessionCount = Number(savedSession);
   updateDots();
 }
+
+const savedAutoStart = localStorage.getItem(KEYS.autoStart);
+if (savedAutoStart === "true") autoStartInput.checked = true;
 
 function updateTodayStats() {
   const today = new Date().toISOString().slice(0, 10);

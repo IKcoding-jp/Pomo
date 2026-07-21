@@ -80,6 +80,11 @@ function formatMinutes(minutes) {
   return h > 0 ? h + "時間" + m + "分" : m + "分";
 }
 
+function formatDate(inputDate) {
+  const d = new Date(inputDate);
+  return d.toISOString().slice(0, 10);
+}
+
 function startTimer() {
   timerState.timer = setInterval(function () {
     const elapsed = Math.floor((Date.now() - timerState.startTimestamp) / 1000);
@@ -228,7 +233,7 @@ const savedAutoStart = localStorage.getItem(KEYS.autoStart);
 if (savedAutoStart === "true") autoStartInput.checked = true;
 
 function updateTodayStats() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = formatDate(new Date());
   const log = getStudyLog();
   const todayData = log[today] || { sessions: 0, workMinutes: 0 };
   const timeStr = formatMinutes(todayData.workMinutes);
@@ -237,8 +242,8 @@ function updateTodayStats() {
 }
 
 function saveTodaySession(workMinutes) {
-  const today = new Date().toISOString().slice(0, 10);
   const log = getStudyLog();
+  const today = formatDate(new Date());
   if (!log[today]) {
     log[today] = { sessions: 0, workMinutes: 0 };
   }
@@ -287,15 +292,14 @@ function renderBarChart() {
   const values = Array.from({ length: 7 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - (6 - i));
-    return (log[d.toISOString().slice(0, 10)] || { workMinutes: 0 })
-      .workMinutes;
+    return (log[formatDate(d)] || { workMinutes: 0 }).workMinutes;
   });
   const maxMinutes = Math.max(...values, 1);
 
   for (let i = 6; i >= 0; i--) {
     const date = new Date();
     date.setDate(date.getDate() - i);
-    const key = date.toISOString().slice(0, 10);
+    const key = formatDate(date);
     const data = log[key] || { sessions: 0, workMinutes: 0 };
 
     const bar = document.createElement("div");
@@ -321,7 +325,7 @@ function renderHeatmap() {
   for (let i = 89; i >= 0; i--) {
     const date = new Date();
     date.setDate(date.getDate() - i);
-    const key = date.toISOString().slice(0, 10);
+    const key = formatDate(date);
     const minutes = (log[key] || { workMinutes: 0 }).workMinutes;
 
     const cell = document.createElement("div");

@@ -11,9 +11,17 @@ const KEYS = {
   studyLog: "studyLog",
 };
 
+const CONFIG = {
+  initialTime: 1500,
+  ringRadius: 90,
+  sessionsPerRound: 4,
+  colorDarkenThreshold: 31,
+  updateInterval: 500,
+};
+
 const timerState = {
-  timeLeft: 1500,
-  totalTime: 1500,
+  timeLeft: CONFIG.initialTime,
+  totalTime: CONFIG.initialTime,
   timer: null,
   isRunning: false,
   timerStatus: "work",
@@ -27,7 +35,7 @@ const startButton = document.getElementById("start");
 const workInput = document.getElementById(KEYS.workTime);
 const breakInput = document.getElementById(KEYS.breakTime);
 const ring = document.querySelector(".ring-progress");
-const circumference = 2 * Math.PI * 90;
+const circumference = 2 * Math.PI * CONFIG.ringRadius;
 const chimeSound = new Audio("sounds/chime.mp3");
 const savedWork = localStorage.getItem(KEYS.workTime);
 const savedBreak = localStorage.getItem(KEYS.breakTime);
@@ -50,7 +58,7 @@ function updateRing(timeLeft, totalTime) {
 
 function updateDots() {
   const dots = document.querySelectorAll(".dot");
-  const current = timerState.sessionCount % 4;
+  const current = timerState.sessionCount % CONFIG.sessionsPerRound;
   dots.forEach(function (dot, index) {
     if (index < current) {
       dot.classList.add("active");
@@ -81,7 +89,7 @@ function startTimer() {
     if (timerState.timeLeft <= 0) {
       handleTimerEnd();
     }
-  }, 500);
+  }, CONFIG.updateInterval);
   timerState.isRunning = true;
   startButton.textContent = "ストップ";
 }
@@ -104,7 +112,7 @@ function handleTimerEnd() {
     localStorage.setItem(KEYS.sessionCount, timerState.sessionCount);
     updateDots();
     timerState.timeLeft =
-      timerState.sessionCount % 4 === 0
+      timerState.sessionCount % CONFIG.sessionsPerRound === 0
         ? longBreakInput.value * 60
         : breakInput.value * 60;
     display.textContent = "休憩";
@@ -318,7 +326,7 @@ function renderHeatmap() {
 
     const cell = document.createElement("div");
     cell.className = "heatmap-cell";
-    if (minutes >= 31) {
+    if (minutes >= CONFIG.colorDarkenThreshold) {
       cell.classList.add("level-2");
     } else if (minutes >= 1) {
       cell.classList.add("level-1");

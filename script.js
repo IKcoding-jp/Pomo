@@ -11,14 +11,16 @@ const KEYS = {
   studyLog: "studyLog",
 };
 
-let timeLeft = 1500;
-let totalTime = 1500;
-let timer;
-let isRunning = false;
-let timerStatus = "work";
-let sessionCount = 0;
-let startTimestamp = null;
-let startTimeLeft = 0;
+const timerState = {
+  timeLeft: 1500,
+  totalTime: 1500,
+  timer: null,
+  isRunning: false,
+  timerStatus: "work",
+  sessionCount: 0,
+  startTimestamp: null,
+  startTimeLeft: 0,
+};
 
 const display = document.querySelector(".ring-time");
 const startButton = document.getElementById("start");
@@ -48,7 +50,7 @@ function updateRing(timeLeft, totalTime) {
 
 function updateDots() {
   const dots = document.querySelectorAll(".dot");
-  const current = sessionCount % 4;
+  const current = timerState.sessionCount % 4;
   dots.forEach(function (dot, index) {
     if (index < current) {
       dot.classList.add("active");
@@ -71,16 +73,16 @@ function formatMinutes(minutes) {
 }
 
 function startTimer() {
-  timer = setInterval(function () {
-    const elapsed = Math.floor((Date.now() - startTimestamp) / 1000);
-    timeLeft = startTimeLeft - elapsed;
-    display.textContent = formatTime(timeLeft);
-    updateRing(timeLeft, totalTime);
-    if (timeLeft <= 0) {
+  timerState.timer = setInterval(function () {
+    const elapsed = Math.floor((Date.now() - timerState.startTimestamp) / 1000);
+    timerState.timeLeft = timerState.startTimeLeft - elapsed;
+    display.textContent = formatTime(timerState.timeLeft);
+    updateRing(timerState.timeLeft, timerState.totalTime);
+    if (timerState.timeLeft <= 0) {
       handleTimerEnd();
     }
   }, 500);
-  isRunning = true;
+  timerState.isRunning = true;
   startButton.textContent = "ストップ";
 }
 
@@ -91,26 +93,26 @@ function getStudyLog() {
 function handleTimerEnd() {
   localStorage.removeItem(KEYS.timerRunning);
   playChime();
-  clearInterval(timer);
-  isRunning = false;
+  clearInterval(timerState.timer);
+  timerState.isRunning = false;
 
-  if (timerStatus === "work") {
-    timerStatus = "break";
-    sessionCount = sessionCount + 1;
+  if (timerState.timerStatus === "work") {
+    timerState.timerStatus = "break";
+    timerState.sessionCount = timerState.sessionCount + 1;
     saveTodaySession(Number(workInput.value));
     updateTodayStats();
-    localStorage.setItem(KEYS.sessionCount, sessionCount);
+    localStorage.setItem(KEYS.sessionCount, timerState.sessionCount);
     updateDots();
-    timeLeft =
-      sessionCount % 4 === 0
+    timerState.timeLeft =
+      timerState.sessionCount % 4 === 0
         ? longBreakInput.value * 60
         : breakInput.value * 60;
     display.textContent = "休憩";
     startButton.textContent = "休憩スタート";
   } else {
-    timerStatus = "work";
-    timeLeft = workInput.value * 60;
-    display.textContent = formatTime(timeLeft);
+    timerState.timerStatus = "work";
+    timerState.timeLeft = workInput.value * 60;
+    display.textContent = formatTime(timerState.timeLeft);
     startButton.textContent = "スタート";
   }
 
@@ -127,55 +129,55 @@ function playChime() {
 }
 
 startButton.addEventListener("click", function () {
-  if (isRunning) {
-    clearInterval(timer);
-    isRunning = false;
+  if (timerState.isRunning) {
+    clearInterval(timerState.timer);
+    timerState.isRunning = false;
     localStorage.removeItem(KEYS.timerRunning);
     startButton.textContent = "スタート";
   } else {
-    totalTime = timeLeft;
-    startTimestamp = Date.now();
-    startTimeLeft = timeLeft;
+    timerState.totalTime = timerState.timeLeft;
+    timerState.startTimestamp = Date.now();
+    timerState.startTimeLeft = timerState.timeLeft;
     startTimer();
     localStorage.setItem(KEYS.timerRunning, "true");
-    localStorage.setItem(KEYS.startTimestamp, startTimestamp);
-    localStorage.setItem(KEYS.startTimeLeft, startTimeLeft);
-    localStorage.setItem(KEYS.timerStatus, timerStatus);
+    localStorage.setItem(KEYS.startTimestamp, timerState.startTimestamp);
+    localStorage.setItem(KEYS.startTimeLeft, timerState.startTimeLeft);
+    localStorage.setItem(KEYS.timerStatus, timerState.timerStatus);
   }
 });
 
 const resetButton = document.getElementById("reset");
 
 resetButton.addEventListener("click", function () {
-  timerStatus = "work";
-  clearInterval(timer);
-  timeLeft = workInput.value * 60;
-  isRunning = false;
+  timerState.timerStatus = "work";
+  clearInterval(timerState.timer);
+  timerState.timeLeft = workInput.value * 60;
+  timerState.isRunning = false;
   localStorage.removeItem(KEYS.timerRunning);
   localStorage.setItem(KEYS.sessionCount, 0);
   startButton.textContent = "スタート";
-  display.textContent = formatTime(timeLeft);
-  updateRing(timeLeft, totalTime);
-  sessionCount = 0;
+  display.textContent = formatTime(timerState.timeLeft);
+  updateRing(timerState.timeLeft, timerState.totalTime);
+  timerState.sessionCount = 0;
   updateDots();
 });
 
 workInput.addEventListener("input", function () {
   if (workInput.value < 1) workInput.value = 1;
   localStorage.setItem(KEYS.workTime, workInput.value);
-  if (!isRunning) {
-    timeLeft = workInput.value * 60;
-    display.textContent = formatTime(timeLeft);
+  if (!timerState.isRunning) {
+    timerState.timeLeft = workInput.value * 60;
+    display.textContent = formatTime(timerState.timeLeft);
   }
 });
 
 breakInput.addEventListener("input", function () {
   if (breakInput.value < 1) breakInput.value = 1;
   localStorage.setItem(KEYS.breakTime, breakInput.value);
-  if (!isRunning) {
-    if (timerStatus === "break") {
-      timeLeft = breakInput.value * 60;
-      display.textContent = formatTime(timeLeft);
+  if (!timerState.isRunning) {
+    if (timerState.timerStatus === "break") {
+      timerState.timeLeft = breakInput.value * 60;
+      display.textContent = formatTime(timerState.timeLeft);
     }
   }
 });
@@ -203,14 +205,14 @@ if (
 
 if (savedWork) {
   workInput.value = savedWork;
-  timeLeft = savedWork * 60;
-  totalTime = timeLeft;
-  display.textContent = formatTime(timeLeft);
+  timerState.timeLeft = savedWork * 60;
+  timerState.totalTime = timerState.timeLeft;
+  display.textContent = formatTime(timerState.timeLeft);
 }
 if (savedBreak) breakInput.value = savedBreak;
 if (savedLongBreak) longBreakInput.value = savedLongBreak;
 if (savedSession) {
-  sessionCount = Number(savedSession);
+  timerState.sessionCount = Number(savedSession);
   updateDots();
 }
 
@@ -238,13 +240,15 @@ function saveTodaySession(workMinutes) {
 }
 
 if (localStorage.getItem(KEYS.timerRunning) === "true") {
-  startTimestamp = Number(localStorage.getItem(KEYS.startTimestamp));
-  startTimeLeft = Number(localStorage.getItem(KEYS.startTimeLeft));
-  timerStatus = localStorage.getItem(KEYS.timerStatus);
-  timeLeft = startTimeLeft - Math.floor((Date.now() - startTimestamp) / 1000);
-  totalTime = startTimeLeft;
-  display.textContent = formatTime(timeLeft);
-  updateRing(timeLeft, totalTime);
+  timerState.startTimestamp = Number(localStorage.getItem(KEYS.startTimestamp));
+  timerState.startTimeLeft = Number(localStorage.getItem(KEYS.startTimeLeft));
+  timerState.timerStatus = localStorage.getItem(KEYS.timerStatus);
+  timerState.timeLeft =
+    timerState.startTimeLeft -
+    Math.floor((Date.now() - timerState.startTimestamp) / 1000);
+  timerState.totalTime = timerState.startTimeLeft;
+  display.textContent = formatTime(timerState.timeLeft);
+  updateRing(timerState.timeLeft, timerState.totalTime);
   startTimer();
 }
 
